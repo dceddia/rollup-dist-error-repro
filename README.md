@@ -24,3 +24,11 @@ Attempting to import a file from `dist`, e.g. `require('rollup/dist/loadConfigFi
 And with Node 17.0.1, this turns into an error:
 
 > Error [ERR_PACKAGE_PATH_NOT_EXPORTED]: Package subpath './dist/loadConfigFile' is not defined by "exports" in /Users/dceddia/Projects/github-repros/rollup-dist-error-repro/node_modules/rollup/package.json
+
+The warning suggests a fix, something like `"./dist*"`, but unfortunately this doesn't actually work. It doesn't fix the error on 17.0.1, and on 16.7.0 it causes an error instead of a warning:
+
+> Error [ERR_INVALID_PACKAGE_TARGET]: Invalid "exports" target "./dist/*" defined for './dist/' in the package config /Users/dceddia/Projects/github-repros/rollup-dist-error-repro/node_modules/rollup/package.json
+
+The fix seems to be to use `"./dist/*": "./dist/*.js"`. See [this change](https://github.com/dceddia/rollup/blob/export-dist/package.json#L140).
+
+Using just a plain wildcard on the end didn't work -- it failed with a `MODULE_NOT_FOUND` error. It needs to end with `*.js`, apparently.
