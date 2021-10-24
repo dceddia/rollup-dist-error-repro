@@ -1,4 +1,4 @@
-# Minimal Reproduction
+# Minimal Reproduction + Fix
 
 Rollup's `package.json` includes an `"exports"` key that exposes a few files and folders.
 
